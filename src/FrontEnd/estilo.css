@@ -1,0 +1,11 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+.produto{
+    width: 90px;
+    height: 90px;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid black;
+}

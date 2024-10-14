@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <style>
+        #link{
+           text-decoration: none;
+           
+        }
+        .bloco{
+            display: flex;
+            justify-content: space-between;
+            margin-left: 30%;
+        }
+        #btnVoltar{
+            display: flex;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bloco">
+        <form id="Cadastro">
+            <h1>Criar Conta</h1>
+            <label for="">Digite um Nome</label>
+            <input type="text"  name="usuario"  placeholder="usuario" id="nome" required> <br>
+            <label for="">Telefone</label>
+
+            <input type="number" name=""  id="telefone" placeholder="telefone" required> <br>
+            <label for="">Senha</label>
+
+            <input type="password" name=""  id="senha" placeholder="criar senha" required> <br>
+        
+            <input type="submit" onclick="criarConta(); return false"> <br>
+            <button id="btnVoltar">
+                <a id="link" href="./TelaLogin.html">Voltar</a>
+            </button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('Cadastro').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const cadastro = {
+                Nome: document.getElementById('nome').value,
+                Telefone: document.getElementById('telefone').value,
+                Senha: document.getElementById('senha').value,
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/Cadastro', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(cadastro)
+                });
+
+                if (response.ok) {
+                    alert('Dados cadastrados com sucesso!');
+                } else {
+                    alert('Erro ao cadastrar os dados!');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao enviar os dados!');
+            }
+        });
+    </script>
+</body>
+</html>

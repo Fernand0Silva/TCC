@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        #link{
+            text-decoration: none;
+        }
+        .bloco{
+            display: flex;
+            justify-content: space-between;
+            margin-left: 30%;
+        }
+        #linkHome{
+            
+            text-decoration: none;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            margin-left: 30%;
+        }
+    </style>
+</head>
+<body>
+<div class="bloco">
+        <form id="Login">
+            <h1>Login</h1>
+            <input type="text" name="usuario" placeholder="telefone" id="telefone"> <br>
+            <input type="password" name="senha" placeholder="senha" id="senha">
+            <p><a id="link" href="./TelaCadastro.html" class="link">Ainda não tem conta</a></p>
+            <input type="submit" value="Login">
+        </form>
+</div>
+     <button id="linkHome"><a id="link" href="./Home.html">Home</a></button>
+
+    <script>
+        document.getElementById('Login').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const loginData = {
+                Telefone: document.getElementById('telefone').value,
+                Senha: document.getElementById('senha').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/Login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                if (response.ok) {
+                    alert('Login realizado com sucesso!');
+                    window.location.href = './Home.html'; 
+                } else {
+                    alert('Telefone ou Senha incorretos');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao realizar login');
+            }
+        });
+    </script>
+    
+</body>
+</html>

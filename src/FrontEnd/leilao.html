@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../FrontEnd/estilo.css">
+    <title>Leilao</title>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        .container{
+            display: flex;
+            justify-content: space-between;
+            flex-flow: column nowrap;
+            width: 30%;
+            height: 30%;
+            margin-left: 10%;
+        }
+        .produto{
+            width:200px;
+            height:200px;
+            overflow: hidden;  
+            border: none; 
+        }
+        .produto  img {
+            width: 100%;
+            height: 100%;
+           object-fit: cover;
+        }
+      
+    </style>
+</head>
+<body>
+   
+    <div class="container">
+        <h1>Leilão do Produto</h1>
+        <div class="produto">
+          <img id="img" src="img/favicon1.jpeg" alt="">
+        </div>
+        <p id="valorMinimo">Preço Inicial: R$ 40,00</p>
+
+        <input id="oferta" type="number" value="" placeholder="digite sua oferta"><br>
+
+        <input id="cliente" type="text" value=""placeholder="digite o seu nome" ><br>
+
+        <input id="tempo" type="number" value=""placeholder="digite o tempo " min="1" ><br>
+        <button onclick="btnTempo()">Tempo</button> <br>
+
+        <button onclick="ofertar()">Ofertar</button> <br>
+       
+
+        <p id="ultimaOferta">Última oferta: </p>
+        <p id="ultimoCliente">Último Cliente: </p>
+        <p id="tempoLimite">Tempo: </p>
+        <button onclick="limpa()">Limpar</button>
+    </div>
+    <button><a href="Artesao.html">Voltar</a></button>
+    
+    <script>
+        function precoInicial(){
+            let precoTexto = document.getElementById('valorMinimo').innerText;
+            let valorInicial = parseFloat(precoTexto.replace('Preço Inicial: R$ ', '').replace(',','.').trim());
+            return valorInicial;
+        }
+        function ofertar(){
+            const valorInicial = parseFloat( document.getElementById('oferta').value);
+            const ClienteInicial = document.getElementById('cliente').value;
+            const minimo = precoInicial();
+            if(valorInicial < minimo){
+                alert("A oferta deve ser maior ou igual a R$ " + minimo.toFixed(2));
+            }else{
+                document.getElementById('ultimaOferta').innerText="Última oferta: R$ " + valorInicial.toFixed(2);;
+            document.getElementById('ultimoCliente').innerText="Última Cliente: " + ClienteInicial;
+            }
+        }
+        function limpa(){
+            const valorInicial = document.getElementById('oferta').value = " ";
+            const ClienteInicial = document.getElementById('cliente').value = " ";
+            clearInterval(intervalo);
+            alert("Contagem cancelada!");            
+
+            let n = document.getElementById('tempo').value = " ";
+
+
+            document.getElementById('ultimaOferta').innerText="Última oferta: R$ " ;
+            document.getElementById('ultimoCliente').innerText="Última Cliente: " ;
+            document.getElementById('tempoLimite').innerText="Tempo: "   ;
+            
+
+        }
+        let intervalo;
+        function btnTempo(){
+            let n = document.getElementById('tempo').value;
+            
+            if(n > 0){
+                intervalo = setInterval(function(){
+                    n--;
+                    document.getElementById('tempo').value = n;
+
+                    if(n <= 0 ){
+                        clearInterval(intervalo);
+                        alert("Tempo esgotado!");
+                    }
+                },1000);
+                document.getElementById('tempoLimite').innerText="Tempo: " + n ;
+            }
+            
+
+        }
+    </script>
+</body>
+</html>

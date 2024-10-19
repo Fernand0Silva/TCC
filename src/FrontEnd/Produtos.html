@@ -6,12 +6,23 @@
     <title>Produtos</title>
 </head>
 <style>
+    body{
+        margin: 0;
+        padding: 0;
+    }
     .produto-detalhes {
         background-color: red;
+        display: block;
+        justify-content: center;
         width: 50%;
         height: 50%;
         margin: 20px;
+        margin-top: 90% ;
     }
+    .produto-detalhesPesquisado{
+        background-color: #007bff;
+    }
+    
     .produto-card {
         background-color: #fff;
         border: 1px solid #ddd;
@@ -20,6 +31,45 @@
         margin: 10px 0;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
+    #searchForm{
+        display: flex;
+        justify-content: center;
+        padding: 15px;
+        margin-top: -100%;
+    }
+    #searchQuery {
+            width: 300px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        #btnPesquisa {
+            padding: 10px;
+            margin-left: 10px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #listarProdutos, #results {
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .produto-detalhes {
+            background-color: red;
+            width: 50%;
+            height: 50%;
+            margin: 20px;
+        }
+        .produto-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
 </style>
 <body>
     <header>
@@ -27,7 +77,7 @@
         <div id="listarProdutos"></div>
         <form id="searchForm">
             <input type="text" name="query" placeholder="Digite o nome do produto" id="searchQuery">
-            <button type="submit">Pesquisar</button>
+            <button id="btnPesquisa" type="submit">Pesquisar</button>
         </form>
         <div id="results"></div>
     </header>
@@ -55,11 +105,12 @@
                         produtos.forEach(produto => {
                             const produtoDiv = document.createElement('div');
                             produtoDiv.innerHTML = `
-                                 <h3>${produto.Nome}</h3>
+                                 <h3>${produto.Nome}</h3> 
                                <div class="produto-detalhes">
                                 <p><b>Nome:</b> ${produto.Nome}</p>
                                 <p><b>Descrição:</b> ${produto.Descricao}</p>
                                 <p><b>Preço:</b> R$ ${produto.Preco.toFixed(2)}</p>
+                                 <button onclick="adicionarAoCarrinho('${produto.Nome}', '${produto.Descricao}', ${produto.Preco})">Comprar</button>
                                 </div>
                                 <hr></hr>
                             `;
@@ -84,7 +135,7 @@
         async function buscarProdutos(event) {
             event.preventDefault(); // Previne o comportamento padrão do form (recarregar a página)
             const searchQuery = document.getElementById('searchQuery').value; // Pegamos o valor digitado
-
+                 
             if (!searchQuery) {
                 alert('Digite algo para pesquisar!');
                 return;
@@ -96,27 +147,36 @@
                     headers: {
                         'Content-Type': 'application/json'
                     }
+                    
                 });
 
                 if (response.ok) {
                     const produtos = await response.json();
                     const resultsDiv = document.getElementById('results');
                     resultsDiv.innerHTML = ''; // Limpa os resultados anteriores
-
+                    // window.location.href = 'ProdutosPesquisados.html';
+                    const listaProdutosDiv = document.getElementById('listarProdutos');
+                   
                     if (produtos.length > 0) {
-                        produtos.forEach(produto => {
+                        const produto = produtos[0]; // Pega o primeiro produto encontrado
+                window.location.href = `PesquisarProduto.html?nome=${encodeURIComponent(produto.Nome)}`;
+          
+                       /* produtos.forEach(produto => {
                             const produtoDiv = document.createElement('div');
                             produtoDiv.innerHTML = `
                                 <h3>${produto.Nome}</h3>
-                                <div class="produto-detalhes">
+                                <div class="produto-detalhesPesquisado">
                                     <p><b>Nome:</b> ${produto.Nome}</p>
                                     <p><b>Descrição:</b> ${produto.Descricao}</p>
                                     <p><b>Preço:</b> R$ ${produto.Preco.toFixed(2)}</p>
+                                    <button>Comprar</button>
+                                    <button>Cancelar</button>
                                 </div>
                                 <hr />
                             `;
                             resultsDiv.appendChild(produtoDiv);
-                        });
+                            //window.location.href = 'ProdutosPesquisados.html';
+                        });*/
                     } else {
                         resultsDiv.innerHTML = '<p>Nenhum produto encontrado!</p>';
                     }
@@ -132,6 +192,31 @@
         // Adicionar evento ao formulário de pesquisa
         const searchForm = document.getElementById('searchForm');
         searchForm.addEventListener('submit', buscarProdutos);
+       
+        // Carrinho
+//let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+
+// Função para atualizar o localStorage
+//function atualizarCarrinho() {
+  //  localStorage.setItem('carrinho', JSON.stringify(carrinho));
+//}
+
+// Função para adicionar ao carrinho
+/*function adicionarAoCarrinho(nome, descricao, preco) {
+    const produto = { nome, descricao, preco };
+    carrinho.push(produto);
+    atualizarCarrinho();
+    alert(`${nome} foi adicionado ao seu carrinho!`);
+}*/
+function adicionarAoCarrinho(nome, descricao, preco) {
+    const carrinho = JSON.parse(localStorage.getItem('carrinho')) || []; // Carrega o carrinho existente
+    const produto = { nome, descricao, preco };
+    carrinho.push(produto); // Adiciona o novo produto
+    localStorage.setItem('carrinho', JSON.stringify(carrinho)); // Atualiza o localStorage
+    alert(`${nome} foi adicionado ao seu carrinho!`);
+}
+
+       
 
     </script>
 </body>

@@ -3,6 +3,10 @@ const express = require('express');
 const cors = require('cors');
 const sql = require('mssql');
 const { conectarBanco } = require('./Database/BdConfig');
+const jwt = require('jsonwebtoken');
+
+
+
 const produtoRoutes = require('./Routes/ProdutoRoutes');
 const artesaoRoutes = require('./Routes/ArtesaoRoutes');
 const cadastroRoutes = require('./Routes/CadastroRoutes'); 

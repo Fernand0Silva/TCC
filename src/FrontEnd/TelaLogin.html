@@ -54,17 +54,22 @@
                     body: JSON.stringify(loginData)
                 });
 
-                if (response.ok) {
-                    alert('Login realizado com sucesso!');
-                    window.location.href = './Home.html'; 
-                } else {
-                    alert('Telefone ou Senha incorretos');
-                }
-            } catch (error) {
-                console.error('Erro:', error);
-                alert('Erro ao realizar login');
-            }
-        });
+                const data = await response.json();
+
+if (response.ok) {
+    // Armazena o token no localStorage
+    localStorage.setItem('token', data.token);
+
+    alert('Login realizado com sucesso!');
+    window.location.href = './Home.html'; 
+} else {
+    alert('Telefone ou Senha incorretos');
+}
+} catch (error) {
+console.error('Erro:', error);
+alert('Erro ao realizar login');
+}
+});
     </script>
     
 </body>

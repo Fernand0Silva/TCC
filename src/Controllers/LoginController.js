@@ -1,4 +1,5 @@
 const {verificarCredenciais} = require('../Models/LoginModel');
+const jwt = require('jsonwebtoken');
 
 const sql = require('mssql');
 
@@ -12,8 +13,19 @@ async function fazerLogin(req, res) {
     try {
         const resultado = await verificarCredenciais(Telefone, Senha);
         
-        if (resultado) {
-            res.status(200).send('Login realizado com sucesso!');
+        if (resultado.auth) {
+            // Armazenar o token no cookie
+            res.cookie('token', resultado.token, {
+                 httpOnly: true,
+                 secure: false,      // Use `true` se estiver usando HTTPS
+                 sameSite: 'lax',    // Controla o compartilhamento de cookies em cross-site requests
+                 maxAge: 3600000     // Tempo de vida do cookie em milissegundos (1 hora aqui)
+                 });// Define o cookie JWT
+        //retorna o token jwt na resposta
+            res.status(200).json
+            ({message:'Login realizado com sucesso!',
+              token: resultado.token // inclui o tiken na resposta
+            });//token:resultado.token
         } else {
             res.status(401).send('Telefone ou Senha incorretos');
         }
